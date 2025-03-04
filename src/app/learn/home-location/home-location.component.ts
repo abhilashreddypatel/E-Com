@@ -11,15 +11,16 @@ import { RouterModule } from '@angular/router';
     <section class="listing">
       <img
         class="listing-photo"
-        [src]="housingLocation.photo"
+        [src]="housingLocation?.photo"
         alt="Exterior photo of {{ housingLocation.name }}"
+        *ngIf="housingLocation?.photo"
         crossorigin
       />
-      <h2 class="listing-heading">{{ housingLocation.name }}</h2>
+      <h2 class="listing-heading">{{ housingLocation?.name }}</h2>
       <p class="listing-location">
-        {{ housingLocation.city }}, {{ housingLocation.state }}
+        {{ housingLocation?.city }}, {{ housingLocation?.state }}
       </p>
-      <a [routerLink]="['/details', housingLocation.id]">details</a>
+      <a [routerLink]="['/details', housingLocation.id]">Details</a>
     </section>
   `,
   styleUrls: ['./home-location.component.css'],

@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeLocationComponent } from '../home-location/home-location.component';
 import { HousingLocation } from '../interfaces/HousingLocation';
 import { HousingService } from '../housing.service';
 import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   imports: [CommonModule, HomeLocationComponent],
@@ -24,12 +25,15 @@ import { ActivatedRoute } from '@angular/router';
   `,
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
-  housingLocationList!: HousingLocation[];
+export class HomeComponent implements OnInit {
+  housingLocationList: HousingLocation[] = [];
 
-  route: ActivatedRoute = inject(ActivatedRoute);
+  private housingService = inject(HousingService);
+  private route = inject(ActivatedRoute);
 
-  constructor(private housingservice: HousingService) {
-    this.housingLocationList = housingservice.getAllHousingLocations();
+  ngOnInit(): void {
+    this.housingService.getAllHousingLocations().then((data) => {
+      this.housingLocationList = data;
+    });
   }
 }
