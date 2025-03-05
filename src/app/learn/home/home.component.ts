@@ -12,13 +12,19 @@ import { ActivatedRoute } from '@angular/router';
   template: `
     <section>
       <form>
-        <input type="text" placeholder="Filter by city" />
-        <button class="primary" type="button">Search</button>
+        <input type="text" placeholder="Filter by city" #filter />
+        <button
+          class="primary"
+          type="button"
+          (click)="filterResults(filter.value)"
+        >
+          Search
+        </button>
       </form>
     </section>
     <section class="results">
       <app-housing-location
-        *ngFor="let housingLocation of housingLocationList"
+        *ngFor="let housingLocation of filteredLocataionList"
         [housingLocation]="housingLocation"
       ></app-housing-location>
     </section>
@@ -28,12 +34,34 @@ import { ActivatedRoute } from '@angular/router';
 export class HomeComponent implements OnInit {
   housingLocationList: HousingLocation[] = [];
 
+  filteredLocataionList: HousingLocation[] = [];
+
   private housingService = inject(HousingService);
   private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.housingService.getAllHousingLocations().then((data) => {
-      this.housingLocationList = data;
-    });
+    this.housingService
+      .getAllHousingLocations()
+      .then((data: HousingLocation[]) => {
+        this.housingLocationList = data;
+        this.filteredLocataionList = this.housingLocationList;
+      });
+  }
+
+  filterResults(value: string) {
+    if (!value) {
+      this.filteredLocataionList = this.housingLocationList;
+      return;
+    }
+
+    this.filteredLocataionList = this.housingLocationList.filter(
+      (housingloation) => {
+        let n = 0;
+        setTimeout(() => {
+          console.log(housingloation.city);
+        }, 1000);
+        housingloation?.city.toLowerCase().includes(value.toLowerCase());
+      }
+    );
   }
 }
